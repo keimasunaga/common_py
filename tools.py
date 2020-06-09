@@ -14,6 +14,55 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 
+
+###############################
+#### Time conversion tools ####
+###############################
+
+def Dt2unix(timeDt):
+    '''
+    Converts datetime to unix time
+    argment:
+        timeDt: a datetime or a list of those
+    returns:
+        unix_time: a double precision unix time or a list of those
+    '''
+    if np.size(timeDt) == 1:
+        unix_time = timeDt.timestamp()
+    else:
+        unix_time = [iDt.timestamp() for iDt in timeDt]
+    return unix_time
+
+
+def unix2Dt(unix_time):
+    '''
+    Converts unix time to datetime
+    argment:
+        unix_time: a double precision unix time or a list of those
+    returns:
+        timeDt: a datetime or a list of those
+    '''
+    if np.size(unix_time) == 1:
+        if type(unix_time) is float:
+            return datetime.fromtimestamp(unix_time)
+        else:
+            return datetime.fromtimestamp(unix_time[0])
+    else:
+        return [datetime.fromtimestamp(it) for it in unix_time]
+
+
+def datenum_to_datetime(datenum):
+    """
+        Convert Matlab datenum into Python datetime.
+        :param datenum: Date in datenum format
+        :return:        Datetime object corresponding to datenum.
+        """
+    days = datenum % 1
+    return datetime.fromordinal(int(datenum)) \
+        + timedelta(days=days) \
+        - timedelta(days=366)
+
+
 ######################
 #### Useful tools ####
 ######################
@@ -69,7 +118,7 @@ def mergedict(dict1, dict2):
     for key, value in dict3.items():
         if key in dict1 and key in dict2:
             dict3[key] = [value , dict1[key]]
-                    
+
     return dict3
 
 def get_timeDt_mean(timeDt):
@@ -103,7 +152,7 @@ def datenum_to_datetime(datenum):
 
 
 class NearestIndex:
-    
+
     def __init__(self, arr, x):
         if np.size(x) > 1:
             self.idx = self.get_nearest_indice(arr, x)
@@ -116,13 +165,13 @@ class NearestIndex:
         delta = abs(arr - x)
         idx = np.where(delta == np.min(delta))[0][0]
         return idx
-    
+
     def get_nearest_indice(self, arr, x):
         idx = np.array([self.get_nearest_index(arr, ix) for ix in x])
         return idx
 
 class NearestDtIndex:
-    
+
     def __init__(self, Dtarr, Dt):
         if np.size(Dt) > 1:
             self.idx = self.get_nearestDt_indice(Dtarr, Dt)
@@ -135,7 +184,7 @@ class NearestDtIndex:
         delta = np.array([abs((iDt - Dt).total_seconds()) for iDt in Dtarr])
         idx = np.where(delta == np.min(delta))[0][0]
         return idx
-    
+
     def get_nearestDt_indice(self, Dtarr, Dt):
         idx = np.array([self.get_nearestDt_index(Dtarr, iDt) for iDt in Dt])
         return idx
@@ -153,7 +202,7 @@ def nnDt(Dtarr, Dt):
 ############################
 #### plot related tools ####
 ############################
-    
+
 def copy_plot_width(ax_src, ax_dest):
     r'''
     copies the wifth of the plot using ax_src to the plot using ax_dest
