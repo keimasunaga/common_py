@@ -197,7 +197,29 @@ def nnDt(Dtarr, Dt):
     nearest = NearestDtIndex(Dtarr, Dt)
     return nearest.idx
 
+class RunTime:
+    '''
+        Caclulate a runnning time of a code.
+        The calculated time would be a time difference between
+        RunTime.start() and RunTime.stop().
+        If RunTime.start() is not set, the start time is defined when the RunTime object is called.
+        Usage:
+        from RunTime import RunTime
+        RT = RunTime()
+        RT.start()
+        Write any code here.
+        RT.stop()
+        '''
+    def __init__(self):
+        self.startrun = time.time()
 
+    def start(self):
+        self.startrun = time.time()
+    
+    def stop(self):
+        runtime = time.time() - self.startrun
+        print ("Runtime:{0}".format(runtime) + "[sec]")
+        print ("Runtime:{0}".format(runtime/60) + "[min]")
 
 ############################
 #### plot related tools ####
