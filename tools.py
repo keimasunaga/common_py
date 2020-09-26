@@ -64,6 +64,38 @@ def datenum_to_datetime(datenum):
         - timedelta(days=366)
 
 
+#########################################
+#### Coordinate transformation tools ####
+#########################################
+
+def quaternion_rotation(q, v):
+
+    v1 = v[0]
+    v2 = v[1]
+    v3 = v[2]
+
+    a = q[0]
+    b = q[1]
+    c = q[2]
+    d = q[3]
+
+    t2 = a*b
+    t3 = a*c
+    t4 = a*d
+    t5 = -b*b
+    t6 = b*c
+    t7 = b*d
+    t8 = -c*c
+    t9 = c*d
+    t10 = -d*d
+
+    v1new = 2*((t8 + t10)*v1 + (t6 - t4)*v2 + (t3 + t7)*v3) + v1
+    v2new = 2*((t4 + t6)*v1 + (t5 + t10)*v2 + (t9 - t2)*v3) + v2
+    v3new = 2*((t7 - t3)*v1 + (t2 + t9)*v2 + (t5 + t8)*v3) + v3
+
+    return v1new, v2new, v3new
+
+
 ######################
 #### Useful tools ####
 ######################
@@ -216,7 +248,7 @@ class RunTime:
 
     def start(self):
         self.startrun = time.time()
-    
+
     def stop(self):
         runtime = time.time() - self.startrun
         print ("Runtime:{0}".format(runtime) + "[sec]")
