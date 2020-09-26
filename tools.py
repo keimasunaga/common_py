@@ -44,7 +44,7 @@ def unix2Dt(unix_time):
         timeDt: a datetime or a list of those
     '''
     if np.size(unix_time) == 1:
-        if type(unix_time) is float:
+        if type(unix_time) is float or type(unix_time) is np.float64:
             return datetime.fromtimestamp(unix_time)
         else:
             return datetime.fromtimestamp(unix_time[0])
