@@ -9,7 +9,7 @@ Created on Sun Apr  7 01:06:34 2019
 import numpy as np
 import os, fnmatch, glob
 from itertools import chain
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
@@ -45,11 +45,11 @@ def unix2Dt(unix_time):
     '''
     if np.size(unix_time) == 1:
         if type(unix_time) is float or type(unix_time) is np.float64:
-            return datetime.fromtimestamp(unix_time)
+            return datetime.fromtimestamp(unix_time, tz=timezone.utc)
         else:
-            return datetime.fromtimestamp(unix_time[0])
+            return datetime.fromtimestamp(unix_time[0], tz=timezone.utc)
     else:
-        return [datetime.fromtimestamp(it) for it in unix_time]
+        return [datetime.fromtimestamp(it, tz=timezone.utc) for it in unix_time]
 
 
 def datenum_to_datetime(datenum):
