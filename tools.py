@@ -296,3 +296,8 @@ def gcas():
     fig = plt.gcf()
     axes = fig.get_axes()
     return axes
+
+def shift_grids(x, y):
+    shifted_x = np.r_[x[0], x[1:] - np.diff(x)*0.5, x[-1]]
+    shifted_y = np.r_[y[0], y[1:] - np.diff(y)*0.5, y[-1]]
+    return shifted_x, shifted_y
