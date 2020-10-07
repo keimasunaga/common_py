@@ -29,9 +29,14 @@ def Dt2unix(timeDt):
         unix_time: a double precision unix time or a list of those
     '''
     if np.size(timeDt) == 1:
+        if timeDt.tzinfo is None:
+            timeDt = timeDt.replace(tzinfo=timezone.utc)
         unix_time = timeDt.timestamp()
     else:
-        unix_time = [iDt.timestamp() for iDt in timeDt]
+        if timeDt[0].tzinfo is None:
+            unix_time = [(iDt.replace(tzinfo=timezone.utc)).timestamp() for iDt in timeDt]
+        else:
+            unix_time = [iDt.timestamp() for iDt in timeDt]
     return unix_time
 
 
