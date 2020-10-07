@@ -215,7 +215,7 @@ class NearestDtIndex:
             self.idx = self.get_nearestDt_indice(Dtarr, Dt)
         else:
             if type(Dt) is list or type(Dt) is np.array:
-                x = x[0]
+                Dt = Dt[0]
             self.idx = self.get_nearestDt_index(Dtarr, Dt)
 
     def get_nearestDt_index(self, Dtarr, Dt):
