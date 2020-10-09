@@ -9,7 +9,8 @@ Created on Sun Apr  7 01:06:34 2019
 import numpy as np
 import os, fnmatch, glob
 from itertools import chain
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
+import calendar
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
@@ -29,14 +30,12 @@ def Dt2unix(timeDt):
         unix_time: a double precision unix time or a list of those
     '''
     if np.size(timeDt) == 1:
-        if timeDt.tzinfo is None:
-            timeDt = timeDt.replace(tzinfo=timezone.utc)
-        unix_time = timeDt.timestamp()
-    else:
-        if timeDt[0].tzinfo is None:
-            unix_time = [(iDt.replace(tzinfo=timezone.utc)).timestamp() for iDt in timeDt]
+        if type(timeDt) is list or type(timeDt) is np.array:
+            unix_time = calendar.timegm(timeDt[0].timetuple())
         else:
-            unix_time = [iDt.timestamp() for iDt in timeDt]
+            unix_time = calendar.timegm(timeDt.timetuple())
+    else:
+        unix_time = [calendar.timegm(i.timetuple()) for i in timeDt]
     return unix_time
 
 
@@ -50,11 +49,11 @@ def unix2Dt(unix_time):
     '''
     if np.size(unix_time) == 1:
         if type(unix_time) is float or type(unix_time) is np.float64:
-            return datetime.fromtimestamp(unix_time, tz=timezone.utc)
+            return datetime.utcfromtimestamp(unix_time)
         else:
-            return datetime.fromtimestamp(unix_time[0], tz=timezone.utc)
+            return datetime.utcfromtimestamp(unix_time[0])
     else:
-        return [datetime.fromtimestamp(it, tz=timezone.utc) for it in unix_time]
+        return [datetime.utcfromtimestamp(it) for it in unix_time]
 
 
 def datenum_to_datetime(datenum):
