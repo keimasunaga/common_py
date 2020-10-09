@@ -168,12 +168,9 @@ def get_timeDt_mean(timeDt):
     return timeDt_mean
 
 def interpDt(Dt_new, Dt, y):
-    if type(Dt_new) is datetime:
-        time_new = datetime.timestamp(Dt_new)
-    else:
-        time_new = np.array([datetime.timestamp(iDt) for iDt in Dt_new])
-    time = np.array([datetime.timestamp(iDt) for iDt in Dt])
-    y_new = np.interp(time_new, time, y)
+    utime_new = Dt2unix(Dt_new)
+    utime = Dt2unix(Dt)
+    y_new = np.interp(utime_new, utime, y)
     return y_new
 
 def datenum_to_datetime(datenum):
