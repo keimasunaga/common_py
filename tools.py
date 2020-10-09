@@ -160,7 +160,7 @@ def mergedict(dict1, dict2):
 
 def get_timeDt_mean(timeDt):
     if np.size(timeDt) > 1:
-        timeDt_mean = datetime.fromtimestamp(sum(map(datetime.timestamp, timeDt))/len(timeDt))
+        timeDt_mean = unix2Dt(sum(Dt2unix(timeDt))/len(timeDt))
     elif np.size(timeDt) == 1:
         timeDt_mean = timeDt
     elif np.size(timeDt) == 0:
