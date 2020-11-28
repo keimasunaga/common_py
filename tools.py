@@ -15,7 +15,9 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 import time
-
+from time import strftime
+from IPython import get_ipython
+ipy = get_ipython()
 
 ###############################
 #### Time conversion tools ####
@@ -266,6 +268,35 @@ def isnotebook():
             return False  # Other type (?)
     except NameError:
         return False      # Probably standard Python interpreter
+
+
+class MyLogger:
+    def __init__(self):
+        self.isnotebook = self._isnotebook()
+
+    def _isnotebook(self):
+        return isnotebook()
+
+    def start(self):
+        ipy = get_ipython()
+        now = datetime.now()
+        this_month = '{:04d}{:02d}'.format(now.year, now.month, now.day)
+        current_dir = ipy.magic('pwd')
+        ldir = current_dir + '/log/' + this_month
+        os.makedirs(ldir, exist_ok=True)
+        if self.isnotebook:
+            #fname = strftime('%Y-%m-%d') + '.log' #if notebook
+            pass
+        else:
+            #fname = strftime('%Y-%m-%d-%H-%M-%S') + '.log' #if ipython
+            fname = strftime('%Y-%m-%d') + '.log' #if ipython
+
+        filename = os.path.join(ldir, fname)
+        ipy.run_line_magic('logstart', '-o %s append' % filename)
+
+    def stop(self):
+        ipy.magic('logstop')
+        pass
 
 
 ############################
